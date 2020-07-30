@@ -28,7 +28,7 @@ def print_matrix(T):
 
 def check_alive_cell(T, i, j):
     count = 0
-    rows, cols = Constants.BLOCK_HEIGHT, Constants.BLOCK_WIDTH
+    rows, cols = Constants.NUMBER_OF_BLOCKS_HIGH, Constants.NUMBER_OF_BLOCKS_WIDE
 
     rmin = i - 1 if i - 1 >= 0 else 0
     rmax = i + 1 if i + 1 < rows else i
@@ -47,15 +47,15 @@ def check_alive_cell(T, i, j):
     
                 
     # print()
-    # print("count is ==",count,"i,j == ",i," ",j)
+    print("count is ==",count<2,"i,j == ",i," ",j)
     # print()
-    return count<2 
+    return count<2 or count>3
 
 
 def check_dead_cell(T, i, j):
     count = 0
     
-    rows, cols = Constants.BLOCK_HEIGHT, Constants.BLOCK_WIDTH
+    rows, cols = Constants.NUMBER_OF_BLOCKS_HIGH, Constants.NUMBER_OF_BLOCKS_WIDE
     rmin = i - 1 if i - 1 >= 0 else 0
     rmax = i + 1 if i + 1 < rows else i
 
@@ -64,9 +64,13 @@ def check_dead_cell(T, i, j):
 
     for x in range(rmin, rmax + 1):
         for y in range(cmin, cmax + 1):
+            if ((i == x) and (j == y)):
+                count += 0
             if T[x][y] == 1:
                 count += 1
-    return count>2 
+    # print("count is ==",count>2,"i,j == ",i," ",j)
+    
+    return ((count>2) and (count<4))
 
 # T = [[0,0,0,0,0,0,0,0,0,0,0,0],
 #     [0,0,0,0,0,0,0,0,0,0,0,0],
@@ -84,12 +88,23 @@ def check_dead_cell(T, i, j):
 T = np.zeros((Constants.NUMBER_OF_BLOCKS_HIGH, Constants.NUMBER_OF_BLOCKS_WIDE), dtype=np.int)
 # T = np.random.randint(0,2, size=(Constants.NUMBER_OF_BLOCKS_HIGH,Constants.NUMBER_OF_BLOCKS_WIDE))
 
-T[4][6] = 1
-T[5][6] = 1
-T[6][6] = 1
+# T[5][5] = 1
+# T[5][6] = 1
+# T[5][7] = 1
+# T[6][5] = 1
+# T[7][6] = 1
 
-for i in range(185):
-    T[randint(0, len(T)-1)][randint(0, len(T[0])-1)] = 1
+T[25][25] = 1
+T[25][26] = 1
+T[25][27] = 1
+T[26][25] = 1
+T[27][26] = 1
+
+
+
+
+# for i in range(185):
+#     T[randint(0, len(T)-1)][randint(0, len(T[0])-1)] = 1
 
 
 SCREEN_WIDTH = 500
@@ -113,9 +128,11 @@ while True:
         draw_map(surface, T)
         pygame.display.update()
         tempT = deepcopy(T)
+        # when space pressed next move
         # keyboard.wait('space')
-        time.sleep(0.5)
-        # print_matrix(tempT)
+        # every move in 0.5 secs
+        time.sleep(0.25)
+        print_matrix(tempT)
         #check every cell
         for i in range(len(T)):
             for j in range(len(T[i])):
@@ -124,11 +141,11 @@ while True:
                         tempT[i][j] = 0
                         print()
                     # print(i,j)
-                if T[i][j] == 0:
+                else:
                     # print(check_dead_cell(tempT, i, j))
                     if check_dead_cell(T, i, j): 
                         tempT[i][j] = 1
-        print_matrix(T)
+        # print_matrix(tempT)
         T = deepcopy(tempT)
 
         
