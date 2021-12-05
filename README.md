@@ -7,4 +7,5 @@ import sys,
 import numpy as np,
 from random import randint,
 import time
-# to quit hold q
+# to quit hold q key
+
